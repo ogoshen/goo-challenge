@@ -3,35 +3,29 @@ define([
 	'goo/entities/World',
 	'goo/entities/EntityUtils',
 	'goo/entities/components/ScriptComponent',
-	'goo/renderer/light/PointLight',
-	'goo/entities/components/LightComponent',
 	'goo/renderer/bounds/BoundingSphere',
 	'goo/renderer/bounds/BoundingBox',
 	'goo/shapes/ShapeCreator',
 	'goo/renderer/Material',
 	'goo/renderer/Util',
-	'goo/renderer/TextureCreator',
 	'goo/renderer/shaders/ShaderLib',
 	'js/CollisionComponent',
 	'js/DoorComponent',
-	'js/rotatingBillboard',
+	'js/Utils'
 ], function(
 	Vector3,
 	World,
 	EntityUtils,
 	ScriptComponent,
-	PointLight,
-	LightComponent,
 	BoundingSphere,
 	BoundingBox,
 	ShapeCreator,
 	Material,
 	Util,
-	TextureCreator,
 	ShaderLib,
 	CollisionComponent,
 	DoorComponent,
-	rotatingBillboard
+	Utils
 ) {
 	'use strict';
 
@@ -84,60 +78,7 @@ define([
 		}
 	};
 
-	function addPointLight(goo, pos, color, settings, parent) {
-		var pointLight = new PointLight();
-		pointLight.color.data = color;
-		pointLight.range = 10;
-		pointLight.intensity = 2;
 
-		if (settings != undefined) {
-			pointLight.range = settings.range;
-			pointLight.intensity = settings.intensity;
-		}
-
-		var pointLightEntity = goo.world.createEntity('pointLight');
-		pointLightEntity.setComponent(new LightComponent(pointLight));
-		pointLightEntity.transformComponent.transform.translation.set(pos);
-		// pointLightEntity.transformComponent.parent = parent;
-		if (parent) {
-			parent.attachChild(pointLightEntity.transformComponent);
-		}
-		pointLightEntity.addToWorld();
-
-		return pointLight;
-	}
-
-
-	function addHalo(size, pos, color, parent) {
-		size = size || 3;
-		pos = pos || Vector3.ZERO;
-		color = color || [1.0, 1.0, 0.5, 0.6];
-
-		var quadMeshData = ShapeCreator.createQuad(size, size);
-		var quadMaterial = Material.createMaterial(rotatingBillboard, 'FlareMaterial');
-		// var quadMaterial = Material.createMaterial(ShaderLib.billboard, 'mat');
-		var quadTexture = new TextureCreator().loadTexture2D('res/images/flare.jpg');
-		quadTexture.wrapS = quadTexture.wrapT = "EdgeClamp";
-		quadMaterial.setTexture('DIFFUSE_MAP', quadTexture);
-		// quadMaterial.blendState.blending = 'AlphaBlending';
-		quadMaterial.depthState.enabled = true;
-		quadMaterial.depthState.write = false;
-		quadMaterial.blendState.blending = 'AdditiveBlending';
-		quadMaterial.renderQueue = 2001;
-
-		rotatingBillboard.uniforms.color = color;
-		goo.callbacksPreRender.push(function(tpf) {
-			rotatingBillboard.uniforms.time = goo.world.time;
-		});
-
-		var quadEntity = EntityUtils.createTypicalEntity(goo.world, quadMeshData, quadMaterial);
-		if(parent)
-			parent.attachChild(quadEntity.transformComponent);
-		quadEntity.transformComponent.transform.translation.set(pos);
-		quadEntity.addToWorld();
-
-		return quadEntity;
-	}
 
 	Level.prototype.createKey = function(goo, originalKey, pos) {
 		var key = EntityUtils.clone(goo.world, originalKey);
@@ -152,13 +93,13 @@ define([
 		key.transformComponent.setTranslation(pos);
 		key.tag = "key";
 
-		// addPointLight(Vector3.add(pos, new Vector3(0, 2, 0)), [1.0, 0.9, 0, 1], {			
-		addPointLight(goo, new Vector3(0, 2, 0), [1.0, 0.9, 0, 1], {
+
+		Utils.addPointLight(goo, new Vector3(0, 2, 0), [1.0, 0.9, 0, 1], {
 			range: 10,
 			intensity: 2
 		}, key.transformComponent);
-		addHalo(3, Vector3.ZERO, [0.9, 0.8, 0, 0.3], key.transformComponent);
-
+		Utils.addHalo(goo, 3, Vector3.ZERO, [0.9, 0.8, 0, 0.3], key.transformComponent);
+ 
 		var up = new Vector3();
 		key.transformComponent.transform.applyForwardVector(Vector3.UNIT_Z, up);
 		/*

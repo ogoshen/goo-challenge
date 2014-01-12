@@ -38,6 +38,7 @@ define([
 	'goo/renderer/pass/BloomPass',
 	'goo/renderer/pass/SSAOPass',
 	'goo/util/ColorUtil',
+	'js/Utils',
 	'js/InventoryComponent',
 	'js/CollisionSystem',
 	'js/CollisionComponent',
@@ -88,6 +89,7 @@ define([
 	BloomPass,
 	SSAOPass,
 	ColorUtil,
+	Utils,
 	InventoryComponent,
 	CollisionSystem,
 	CollisionComponent,
@@ -106,7 +108,7 @@ define([
 
 	Game.init = function(goo, loader) {
 
-		window.gui = new dat.GUI();
+		// window.gui = new dat.GUI();
 		// window.gui = null;
 
 		Game.world = goo.world;
@@ -225,14 +227,62 @@ define([
 			return x / Math.abs(x);
 		}
 
+		var RotationScript = function(x, y, z) {
+			x = x == undefined ? 1 : x;
+			y = y == undefined ? 1 : y;
+			z = z == undefined ? 1 : z;
+			return {
+				run: function(entity) {
+					entity.transformComponent.transform.rotation.rotateX(x * World.tpf);
+					entity.transformComponent.transform.rotation.rotateY(y * World.tpf);
+					entity.transformComponent.transform.rotation.rotateZ(z * World.tpf);
+					entity.transformComponent.setUpdated();
+				}
+			}
+		};
+
+
+		var axe = loader.getCachedObjectForRef("mini_knight_split/entities/axe_0.entity");
+		axe.meshRendererComponent.hidden = true;
+		window.axe = axe;
+
 		level1.buildMap(goo, loader);
 		level1.init(function initLevel1() {
 			var key = this.createKey(goo, YellowKey, [-1, 1, 10]);
+			key.tip = '<span class="lobster">Great you found a key!<span><br><span class="ruge">You should look around for a weapon...</span>';
+
 			this.getBlock(5, 6).setComponent(new DoorComponent(key));
 			this.getBlock(11, 5).setComponent(new DoorComponent(key));
 
 			key = this.createKey(goo, YellowKey, [22, 1, 0]);
 			this.getBlock(15, 7).setComponent(new DoorComponent(key));
+
+
+			var axe2 = EntityUtils.clone(goo.world, axe);
+			var sphereBounds = new BoundingSphere();
+			sphereBounds.radius = 0.3;
+			axe2.addToWorld();
+			axe2.transformComponent.setTranslation(0.3, -0.5, 0.5)
+			axe2.transformComponent.setRotation(-Math.PI / 2, 0, 0);
+
+
+			var axeParent = EntityUtils.createTypicalEntity(goo.world);
+			axeParent.transformComponent.attachChild(axe2.transformComponent);
+			axeParent.setComponent(new ScriptComponent([new RotationScript(0, 3, 2)]));
+			// axeParent.transformComponent.setTranslation(0, 1, 2);
+			axeParent.transformComponent.setTranslation(5, 1, 12);
+			axeParent.transformComponent.setScale(2, 2, 2);
+			axeParent.addToWorld();
+
+			axeParent.setComponent(new CollisionComponent(axeParent, sphereBounds));
+			axeParent.tag = "weapon";
+
+			Utils.addPointLight(goo, Vector3.ZERO, [0.3, 0, 0.9, 1], {
+				range: 10,
+				intensity: 2
+			}, axeParent.transformComponent);
+			Utils.addHalo(goo, 3, Vector3.ZERO, [0.3, 0.8, 0.9, 0.3], axeParent.transformComponent);
+			window.axe2 = axe2;
 
 			// this.getBlock(2, 3).setComponent(new ScriptComponent({
 			// 	run: function(entity) {
@@ -285,7 +335,7 @@ define([
 			trunk.meshRendererComponent.materials = [material];
 			window.tree = tree;
 
-			addPointLight(Vector3.add(p, new Vector3(0, 4, 0)), [1, 0, 0, 1]);
+			Utils.addPointLight(goo, Vector3.add(p, new Vector3(0, 4, 0)), [1, 0, 0, 1]);
 
 			tree.transformComponent.setScale(0, 0, 0);
 			new TWEEN.Tween({
@@ -397,73 +447,6 @@ define([
 
 			return spotLightEntity;
 		}
-
-		function addPointLight(pos, color, settings, parent) {
-			var pointLight = new PointLight();
-			pointLight.color.data = color;
-			pointLight.range = 10;
-			pointLight.intensity = 2;
-
-			if (settings != undefined) {
-				pointLight.range = settings.range;
-				pointLight.intensity = settings.intensity;
-			}
-
-			var pointLightEntity = goo.world.createEntity('pointLight');
-			pointLightEntity.setComponent(new LightComponent(pointLight));
-			pointLightEntity.transformComponent.transform.translation.set(pos);
-			pointLightEntity.transformComponent.parent = parent;
-			pointLightEntity.addToWorld();
-
-			return pointLight;
-		}
-
-
-		var RotationScript = function(x, y, z) {
-			x = x == undefined ? 1 : x;
-			y = y == undefined ? 1 : y;
-			z = z == undefined ? 1 : z;
-			return {
-				run: function(entity) {
-					entity.transformComponent.transform.rotation.rotateX(x * World.tpf);
-					entity.transformComponent.transform.rotation.rotateY(y * World.tpf);
-					entity.transformComponent.transform.rotation.rotateZ(z * World.tpf);
-					entity.transformComponent.setUpdated();
-				}
-			}
-		};
-
-
-		function addHalo(size, pos, color, parent) {
-			size = size || 3;
-			pos = pos || Vector3.ZERO;
-			color = color || [1.0, 1.0, 0.5, 0.6];
-
-			var quadMeshData = ShapeCreator.createQuad(size, size);
-			var quadMaterial = Material.createMaterial(rotatingBillboard, 'FlareMaterial');
-			// var quadMaterial = Material.createMaterial(ShaderLib.billboard, 'mat');
-			var quadTexture = new TextureCreator().loadTexture2D('res/images/flare.jpg');
-			quadTexture.wrapS = quadTexture.wrapT = "EdgeClamp";
-			quadMaterial.setTexture('DIFFUSE_MAP', quadTexture);
-			// quadMaterial.blendState.blending = 'AlphaBlending';
-			quadMaterial.depthState.enabled = true;
-			quadMaterial.depthState.write = false;
-			quadMaterial.blendState.blending = 'AdditiveBlending';
-			quadMaterial.renderQueue = 2001;
-
-			rotatingBillboard.uniforms.color = color;
-			goo.callbacksPreRender.push(function(tpf) {
-				rotatingBillboard.uniforms.time = goo.world.time;
-			});
-
-			var quadEntity = EntityUtils.createTypicalEntity(goo.world, quadMeshData, quadMaterial);
-			quadEntity.transformComponent.parent = parent;
-			quadEntity.transformComponent.transform.translation.set(pos);
-			quadEntity.addToWorld();
-
-			return quadEntity;
-		}
-
 
 
 		var castRay = picking.castRay = function(ray, mask, all) {
@@ -781,12 +764,12 @@ define([
 		// knight.transformComponent.setTranslation(31, 0, 5);
 
 		knight.collisionComponent.onCollisionStay = function(other) {
-			if(other.tag == "wall" || other.tag == "door") {
+			if (other.tag == "wall" || other.tag == "door") {
 				var v = Vector3.sub(other.transformComponent.transform.translation, knight.transformComponent.transform.translation);
-				v.y = 0;				
+				v.y = 0;
 				var d = v.length() - other.collisionComponent.bounds.radius - knight.collisionComponent.bounds.radius;
 				// knight.transformComponent.transform.translation.add(v.mul(d));				
-				knight.transformComponent.transform.translation.add(v.mul(d * World.tpf));				
+				knight.transformComponent.transform.translation.add(v.mul(d * World.tpf));
 				// knight.transformComponent.transform.translation.add(v.mul(d));
 				knight.transformComponent.setUpdated();
 			}
@@ -795,23 +778,55 @@ define([
 				var v = Vector3.sub(other.transformComponent.transform.translation, knight.transformComponent.transform.translation);
 				v.y = 0;
 				var d = v.length() - other.collisionComponent.bounds.radius - knight.collisionComponent.bounds.radius;
-				knight.transformComponent.transform.translation.add(v.mul(d * World.tpf * Math.exp(1)));				
+				knight.transformComponent.transform.translation.add(v.mul(d * World.tpf * Math.exp(1)));
 				// knight.transformComponent.transform.translation.add(v.mul(d * World.tpf));				
 				// knight.transformComponent.transform.translation.add(v.mul(d));
 				knight.transformComponent.setUpdated();
 
-				var s = knight.animationComponent.layers[0].getCurrentState().name;
-				if(s == "hit") {
+				var s = knight.animationComponent.layers[0].getCurrentState();
+
+				if (s && s.name == 'hit')
+					s.onFinished = function() {
+						console.log("finished");
+						other.healthComponent.hp -= 1;
+						if (other.healthComponent.hp > 0)
+							other.animationComponent.transitionTo("hurt");
+						knight.animationComponent.transitionTo("idle");
+						knight.scriptComponent.scripts[0].lastAnim = 'idle';
+						delete s.onFinished;
+						return true;
+					}
+
+				// console.log(s);
+				// if (s && s.name == "hit") {
+				if (false) {
 					other.healthComponent.hp -= 1;
-					console.log(other.healthComponent.hp);
-					// other.animationComponent.transitionTo("hurt");
-					console.log(other.enemy.state);
+					if (other.healthComponent.hp > 0)
+						other.animationComponent.transitionTo("hurt");
 				}
 			}
 		}
 
 		knight.collisionComponent.onCollision = function(other) {
 			if (other.tag == undefined) return;
+			console.log(other.tag);
+
+			if (other.tip) {
+				if (false) {
+					$("#tutorial p").html(other.tip);
+					goo.doRender = goo.doProcess = false;
+					_.delay(function() {
+						goo.doRender = goo.doProcess = true;
+					}, 3000);
+					$("#tutorial").hide().fadeIn().delay(3250).fadeOut(750);
+					$("#tutorial p").hide().delay(500).fadeIn().delay(2000).fadeOut(500);
+				}
+			}
+
+			if (other.tag == "weapon") {
+				other.removeFromWorld();
+				axe.meshRendererComponent.hidden = false;
+			}
 
 			if (other.tag == "enemy") {
 				// var v = Vector3.sub(other.transformComponent.transform.translation, knight.transformComponent.transform.translation);
@@ -819,7 +834,7 @@ define([
 				// console.log(d);
 				// knight.transformComponent.transform.translation.add(v.mul(d));
 				// knight.transformComponent.setUpdated();
-				knight.animationComponent.transitionTo("hurt");
+				// knight.animationComponent.transitionTo("hurt");
 				console.log("ouch!");
 			}
 
@@ -827,7 +842,6 @@ define([
 				console.log("found a key!");
 				console.log(other);
 
-				// $("#tutorial").hide().fadeIn().delay(3000).fadeOut('slow');
 
 				_.delay(function() {
 					knight.howlerComponent.playSound('key');
@@ -913,9 +927,6 @@ define([
 
 		window.knight = knight;
 
-		var axe = loader.getCachedObjectForRef("mini_knight_split/entities/axe_0.entity");
-		// axe.meshRenderComponent.hidden = true;
-		window.axe = axe;
 
 		var knightTop = [
 			loader.getCachedObjectForRef("mini_knight_split/entities/body_0.entity"),
@@ -987,27 +998,26 @@ define([
 		}
 
 
-		knight.setComponent(new ScriptComponent([{
-			run: function(entity) {
-				if (Input.keys[KeyEvent.DOM_VK_SPACE]) {
-					knight.animationComponent.transitionTo("hit");
-				}
-			}
-		}, {
-			forwardSpeed: 0.15,
+		knight.setComponent(new ScriptComponent({
+			// forwardSpeed: 0.15,
+			forwardSpeed: 0.1,
 			// forwardSpeed: 0.05,
 			runningSpeed: 1,
 			rotationSpeed: 10,
 			// accel: Math.exp(-0.5),
 			// accel: 1,
-			accel: 1,
+			accel: 0.1,
 			forward: new Vector3(),
 			speed: 0,
 			ray: new Ray(),
 			lastStep: 0,
-			run: function(entity) {
-				var transform = entity.transformComponent.transform;
-				var pos = transform.translation;
+			lastAnim: '',
+			run: function PlayerScript(entity) {
+				if (!axe.meshRendererComponent.hidden && Input.keys[KeyEvent.DOM_VK_SPACE]) {
+					knight.animationComponent.transitionTo("hit");
+					// knight.animationComponent.layers[0].setCurrentStateByName("hit");
+				}
+
 
 				var dir = new Vector3();
 				dir.z += Input.keys[87] ? -1 : 0;
@@ -1016,14 +1026,45 @@ define([
 				dir.x += Input.keys[68] ? 1 : 0;
 				dir = dir.normalize();
 
-				var anim = dir.length() > 0 ? "walk" : "idle";
-				// anim = this.speed < -this.runningSpeed ? "run" : anim;
-				entity.animationComponent.transitionTo(anim);
+				var currentState = entity.animationComponent.layers[0]._currentState;
+				// console.log([currentState, currentState ? currentState.name : null]);
+				// console.log(currentState ? currentState.name : null);
+				// if (currentState != null && currentState.name != "hit") 
 
-				// var m = Input.mousePosition;
-				// var mw = cam.getWorldCoordinates(m.x, m.y, goo.renderer.domElement.width, goo.renderer.domElement.height, 1);
+				// if(this.lastAnim != currentState.name)
+				// console.log([this.lastAnim, currentState.name]);
 
-				// var topForward = new Vector3(-mw.x, 0, mw.z + mw.y);
+				if (currentState && currentState.name == 'hit') {
+					var clip = currentState._sourceTree._clipInstance;
+					clip._loopCount = 1;
+					this.lastAnim = 'hit';
+				}
+
+				// console.log([currentState ? currentState.name : currentState, this.lastAnim]);
+
+				if (null == currentState) {
+					entity.animationComponent.layers[0].setCurrentStateByName("hit");
+					entity.animationComponent.transitionTo('idle');
+					this.lastAnim = 'idle';
+				}
+
+				if (this.lastAnim != 'hit') {
+					// var anim = currentState ? currentState.name : 'idle';
+					// anim = dir.length() > 0 ? "walk" : anim;
+					var anim = dir.length() > 0 ? "walk" : "idle";
+					// anim = this.speed < -this.runningSpeed ? "run" : anim;
+
+
+					entity.animationComponent.transitionTo(anim);
+					// entity.animationComponent.layers[s0].setCurrentStateByName(anim);
+					this.lastAnim = anim;
+				} else {
+					return;
+				}
+
+				var transform = entity.transformComponent.transform;
+				var pos = transform.translation;
+
 				var topDir = new Vector3();
 				topDir.z += Input.keys[KeyEvent.DOM_VK_UP] ? -1 : 0;
 				topDir.z += Input.keys[KeyEvent.DOM_VK_DOWN] ? 1 : 0;
@@ -1160,8 +1201,10 @@ define([
 				// // pointLight.transformComponent.transform.translation = Vector3.add(pos, new Vector3(r * Math.cos(t), 45, r * Math.sin(t) + r));
 				// pointLight.transformComponent.transform.translation.lerp(pl, Math.exp(-1) * World.tpf);
 				// pointLight.transformComponent.setUpdated();
+				// 
+
 			}
-		}]));
+		}));
 
 
 
@@ -1187,13 +1230,13 @@ define([
 				.easing(TWEEN.Easing.Cubic.InOut)
 				.start();
 
-			if (gui) {
+			/*
 				var camGui = gui.addFolder('Camera');
 				camGui.add(camSettings.offset, 'y', 0, 15);
 				camGui.add(camSettings.offset, 'z', -15, 0);
 				camGui.add(camSettings, 'smoothing', 0, 10);
 				camGui.open();
-			}
+			*/
 
 			camEntity.transformComponent.setTranslation(0, 100, -100);
 

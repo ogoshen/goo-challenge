@@ -48,7 +48,7 @@
                 ],
                 "intensity": 0.52,
                 "lightCookie": null,
-                "shadowCaster": true,
+                "shadowCaster": false,
                 "shadowSettings": {
                     "darkness": 0.75,
                     "far": 1000,
@@ -1683,14 +1683,20 @@
         "layers": [
             {
                 "blendWeight": 1,
-                "defaultState": "die",
+                "defaultState": "idle",
                 "name": "Default animation layer",
                 "states": {
                     "die": {
                         "stateRef": "mini_knight_split/animations/die_0.animstate"
                     },
                     "hit": {
-                        "stateRef": "mini_knight_split/animations/hit.animstate"
+                        "stateRef": "mini_knight_split/animations/hit.animstate",
+                        "transitions": {
+                            "*": {
+                                "fadeTime": "0.2",
+                                "type": "Fade"
+                            }
+                        }
                     },
                     "hit2": {
                         "stateRef": "mini_knight_split/animations/hit2_0.animstate"
@@ -1702,7 +1708,17 @@
                         "stateRef": "mini_knight_split/animations/hurt_0.animstate"
                     },
                     "idle": {
-                        "stateRef": "mini_knight_split/animations/idle.animstate"
+                        "stateRef": "mini_knight_split/animations/idle.animstate",
+                        "transitions": {
+                            "*": {
+                                "fadeTime": "0.1",
+                                "type": "Fade"
+                            },
+                            "hit": {
+                                "fadeTime": "0.1",
+                                "type": "Fade"
+                            }
+                        }                        
                     },
                     "run": {
                         "stateRef": "mini_knight_split/animations/run.animstate"
@@ -3162,7 +3178,7 @@
     "mini_knight_split/animations/die_0.animstate": {
         "clipSource": {
             "clipRef": "mini_knight_split/animations/die.clip",
-            "loopCount": -1,
+            "loopCount": 1,
             "timeScale": 1,
             "type": "Clip"
         },
@@ -3891,7 +3907,7 @@
     "mini_knight_split/animations/hit2.animstate": {
         "clipSource": {
             "clipRef": "mini_knight_split/animations/hit2.clip",
-            "loopCount": -1,
+            "loopCount": 1,
             "timeScale": 1,
             "type": "Clip"
         },
@@ -4610,7 +4626,7 @@
     "mini_knight_split/animations/hit2_0.animstate": {
         "clipSource": {
             "clipRef": "mini_knight_split/animations/hit2.clip",
-            "loopCount": -1,
+            "loopCount": 1,
             "timeScale": 1,
             "type": "Clip"
         },
@@ -4620,7 +4636,7 @@
     "mini_knight_split/animations/hit3.animstate": {
         "clipSource": {
             "clipRef": "mini_knight_split/animations/hit3.clip",
-            "loopCount": -1,
+            "loopCount": 1,
             "timeScale": 1,
             "type": "Clip"
         },
@@ -5349,7 +5365,7 @@
     "mini_knight_split/animations/hurt.animstate": {
         "clipSource": {
             "clipRef": "mini_knight_split/animations/hurt.clip",
-            "loopCount": -1,
+            "loopCount": 1,
             "timeScale": 1,
             "type": "Clip"
         },
@@ -6068,7 +6084,7 @@
     "mini_knight_split/animations/hurt_0.animstate": {
         "clipSource": {
             "clipRef": "mini_knight_split/animations/hurt.clip",
-            "loopCount": -1,
+            "loopCount": 1,
             "timeScale": 1,
             "type": "Clip"
         },

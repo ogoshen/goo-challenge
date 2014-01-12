@@ -13,7 +13,7 @@ define([
 		this.type = "Enemy";
 		this.entity = entity;
 		this.direction = new Vector3(0, 0, 1);
-		this.speed = 0.04;
+		this.speed = 0.03;
 		this.ray = new Ray();
 		this.state = 0;
 		this.target = null;
@@ -115,20 +115,22 @@ define([
 				break;
 
 			case Enemy.States.DEAD:
-				delete this.onCollision;
-				delete this.state;
 				// this.state = -1;
 
 				entity.animationComponent.transitionTo("die");
+
 				// entity.animationComponent.transitionTo("idle");
 				console.log("dead");
 				new TWEEN.Tween({
 					y: 0
 				}).to({
 					y: -1
-				}, 2000).delay(1300)
-					.onStart(function(){
-						entity.animationComponent.paused = true;
+				}, 4000).delay(750)
+					.easing(TWEEN.Easing.Exponential.In)
+					.onStart(function() {
+						// var s = entity.animationComponent.layers[0]._currentState;
+						// s._sourceTree._clipInstance._loopCount = 1;
+						// entity.animationComponent.paused = true;
 					})
 					.onUpdate(function() {
 						entity.transformComponent.transform.translation.y = this.y;
@@ -138,6 +140,9 @@ define([
 					entity.removeFromWorld();
 				})
 					.start();
+
+				delete this.onCollision;
+				delete this.state;
 
 				break;
 			default:
