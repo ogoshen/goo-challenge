@@ -46,7 +46,7 @@
                     0,
                     0
                 ],
-                "intensity": 0.52,
+                "intensity": 0.32,
                 "lightCookie": null,
                 "shadowCaster": false,
                 "shadowSettings": {
@@ -89,6 +89,7 @@
                 ]
             }
         },
+        "hidden": false,
         "name": "DirectionalLight",
         "ref": "entities/DirectionalLight.entity"
     },
@@ -1692,8 +1693,8 @@
                     "hit": {
                         "stateRef": "mini_knight_split/animations/hit.animstate",
                         "transitions": {
-                            "*": {
-                                "fadeTime": "0.2",
+                            "idle": {
+                                "fadeTime": "0.1",
                                 "type": "Fade"
                             }
                         }
@@ -1705,20 +1706,11 @@
                         "stateRef": "mini_knight_split/animations/hit3_0.animstate"
                     },
                     "hurt": {
-                        "stateRef": "mini_knight_split/animations/hurt_0.animstate"
+                        "stateRef": "mini_knight_split/animations/hurt_0.animstate",
+                        "transitions": {}
                     },
                     "idle": {
-                        "stateRef": "mini_knight_split/animations/idle.animstate",
-                        "transitions": {
-                            "*": {
-                                "fadeTime": "0.1",
-                                "type": "Fade"
-                            },
-                            "hit": {
-                                "fadeTime": "0.1",
-                                "type": "Fade"
-                            }
-                        }                        
+                        "stateRef": "mini_knight_split/animations/idle.animstate"
                     },
                     "run": {
                         "stateRef": "mini_knight_split/animations/run.animstate"
@@ -2459,7 +2451,7 @@
     "mini_knight_split/animations/die.animstate": {
         "clipSource": {
             "clipRef": "mini_knight_split/animations/die.clip",
-            "loopCount": 1,
+            "loopCount": -1,
             "timeScale": 1,
             "type": "Clip"
         },
@@ -3178,8 +3170,8 @@
     "mini_knight_split/animations/die_0.animstate": {
         "clipSource": {
             "clipRef": "mini_knight_split/animations/die.clip",
-            "loopCount": 1,
-            "timeScale": 1,
+            "loopCount": "0",
+            "timeScale": "1",
             "type": "Clip"
         },
         "name": "die",
@@ -3907,7 +3899,7 @@
     "mini_knight_split/animations/hit2.animstate": {
         "clipSource": {
             "clipRef": "mini_knight_split/animations/hit2.clip",
-            "loopCount": 1,
+            "loopCount": -1,
             "timeScale": 1,
             "type": "Clip"
         },
@@ -4626,7 +4618,7 @@
     "mini_knight_split/animations/hit2_0.animstate": {
         "clipSource": {
             "clipRef": "mini_knight_split/animations/hit2.clip",
-            "loopCount": 1,
+            "loopCount": -1,
             "timeScale": 1,
             "type": "Clip"
         },
@@ -4636,7 +4628,7 @@
     "mini_knight_split/animations/hit3.animstate": {
         "clipSource": {
             "clipRef": "mini_knight_split/animations/hit3.clip",
-            "loopCount": 1,
+            "loopCount": -1,
             "timeScale": 1,
             "type": "Clip"
         },
@@ -5365,7 +5357,7 @@
     "mini_knight_split/animations/hurt.animstate": {
         "clipSource": {
             "clipRef": "mini_knight_split/animations/hurt.clip",
-            "loopCount": 1,
+            "loopCount": -1,
             "timeScale": 1,
             "type": "Clip"
         },
@@ -6084,8 +6076,8 @@
     "mini_knight_split/animations/hurt_0.animstate": {
         "clipSource": {
             "clipRef": "mini_knight_split/animations/hurt.clip",
-            "loopCount": 1,
-            "timeScale": 1,
+            "loopCount": "0",
+            "timeScale": "1",
             "type": "Clip"
         },
         "name": "hurt",
@@ -8248,6 +8240,43 @@
         "name": "walk",
         "ref": "mini_knight_split/animations/walk.clip"
     },
+    "mini_knight_split/entities/Mesh.entity": {
+        "components": {
+            "meshData": {
+                "meshRef": "mini_knight_split/meshes/Mesh_0.mesh",
+                "poseRef": "mini_knight_split/skeletons/Skeleton.skeleton"
+            },
+            "meshRenderer": {
+                "castShadows": true,
+                "cullMode": "Dynamic",
+                "hidden": false,
+                "materialRefs": [],
+                "receiveShadows": true,
+                "reflectable": false
+            },
+            "transform": {
+                "parentRef": "mini_knight_split/entities/RootNode_0.entity",
+                "rotation": [
+                    0,
+                    0,
+                    0
+                ],
+                "scale": [
+                    1,
+                    0.9999999999999999,
+                    0.9999999999999999
+                ],
+                "translation": [
+                    0,
+                    0,
+                    0.008549976162612
+                ]
+            }
+        },
+        "name": "Mesh",
+        "nodeType": "Mesh",
+        "ref": "mini_knight_split/entities/Mesh.entity"
+    },
     "mini_knight_split/entities/Mesh_0.entity": {
         "components": {
             "meshData": {
@@ -8258,9 +8287,7 @@
                 "castShadows": true,
                 "cullMode": "Dynamic",
                 "hidden": false,
-                "materialRefs": [
-                    "mini_knight_split/materials/Material__mini_knight_png_1.material"
-                ],
+                "materialRefs": [],
                 "receiveShadows": true,
                 "reflectable": false
             },
@@ -8273,8 +8300,8 @@
                 ],
                 "scale": [
                     1,
-                    1,
-                    1
+                    0.9999999999999999,
+                    0.9999999999999999
                 ],
                 "translation": [
                     0,
@@ -8287,6 +8314,43 @@
         "nodeType": "Mesh",
         "ref": "mini_knight_split/entities/Mesh_0.entity"
     },
+    "mini_knight_split/entities/Mesh_001.entity": {
+        "components": {
+            "meshData": {
+                "meshRef": "mini_knight_split/meshes/Mesh_001_0.mesh",
+                "poseRef": "mini_knight_split/skeletons/Skeleton.skeleton"
+            },
+            "meshRenderer": {
+                "castShadows": true,
+                "cullMode": "Dynamic",
+                "hidden": false,
+                "materialRefs": [],
+                "receiveShadows": true,
+                "reflectable": false
+            },
+            "transform": {
+                "parentRef": "mini_knight_split/entities/RootNode_0.entity",
+                "rotation": [
+                    0,
+                    0,
+                    0
+                ],
+                "scale": [
+                    1,
+                    0.9999999999999999,
+                    0.9999999999999999
+                ],
+                "translation": [
+                    0,
+                    0,
+                    0.008549976162612
+                ]
+            }
+        },
+        "name": "Mesh_001",
+        "nodeType": "Mesh",
+        "ref": "mini_knight_split/entities/Mesh_001.entity"
+    },
     "mini_knight_split/entities/Mesh_001_0.entity": {
         "components": {
             "meshData": {
@@ -8297,9 +8361,7 @@
                 "castShadows": true,
                 "cullMode": "Dynamic",
                 "hidden": false,
-                "materialRefs": [
-                    "mini_knight_split/materials/Material__mini_knight_png.material"
-                ],
+                "materialRefs": [],
                 "receiveShadows": true,
                 "reflectable": false
             },
@@ -8311,9 +8373,9 @@
                     0
                 ],
                 "scale": [
-                    2,
-                    2,
-                    2
+                    1,
+                    0.9999999999999999,
+                    0.9999999999999999
                 ],
                 "translation": [
                     0,
@@ -8331,6 +8393,9 @@
             "animation": {
                 "layersRef": "mini_knight_split/animations/Animations.animation",
                 "poseRef": "mini_knight_split/skeletons/Skeleton.skeleton"
+            },
+            "stateMachine": {
+                "machineRefs": []
             },
             "transform": {
                 "rotation": [
@@ -8351,7 +8416,75 @@
             }
         },
         "name": "mini_knight_split",
-        "nodeType": "Null"
+        "nodeType": "Null",
+        "ref": "mini_knight_split/entities/RootNode.entity"
+    },
+    "mini_knight_split/entities/RootNode_0.entity": {
+        "components": {
+            "stateMachine": {
+                "machineRefs": []
+            },
+            "transform": {
+                "rotation": [
+                    0,
+                    0,
+                    0
+                ],
+                "scale": [
+                    2,
+                    2,
+                    2
+                ],
+                "translation": [
+                    4.538835525512695,
+                    0,
+                    0
+                ]
+            }
+        },
+        "hidden": true,
+        "name": "enemy",
+        "nodeType": "Null",
+        "ref": "mini_knight_split/entities/RootNode_0.entity"
+    },
+    "mini_knight_split/entities/axe.entity": {
+        "components": {
+            "meshData": {
+                "meshRef": "mini_knight_split/meshes/axe_0.mesh",
+                "poseRef": "mini_knight_split/skeletons/Skeleton.skeleton"
+            },
+            "meshRenderer": {
+                "castShadows": true,
+                "cullMode": "Dynamic",
+                "hidden": false,
+                "materialRefs": [
+                    "mini_knight_split/materials/unnamed.material"
+                ],
+                "receiveShadows": true,
+                "reflectable": false
+            },
+            "transform": {
+                "parentRef": "mini_knight_split/entities/RootNode_0.entity",
+                "rotation": [
+                    0,
+                    0,
+                    0
+                ],
+                "scale": [
+                    1,
+                    0.9999999999999999,
+                    0.9999999999999999
+                ],
+                "translation": [
+                    0,
+                    0,
+                    0
+                ]
+            }
+        },
+        "name": "axe",
+        "nodeType": "Mesh",
+        "ref": "mini_knight_split/entities/axe.entity"
     },
     "mini_knight_split/entities/axe_0.entity": {
         "components": {
@@ -8392,6 +8525,45 @@
         "nodeType": "Mesh",
         "ref": "mini_knight_split/entities/axe_0.entity"
     },
+    "mini_knight_split/entities/back.entity": {
+        "components": {
+            "meshData": {
+                "meshRef": "mini_knight_split/meshes/back_0.mesh",
+                "poseRef": "mini_knight_split/skeletons/Skeleton.skeleton"
+            },
+            "meshRenderer": {
+                "castShadows": true,
+                "cullMode": "Dynamic",
+                "hidden": false,
+                "materialRefs": [
+                    "mini_knight_split/materials/unnamed.material"
+                ],
+                "receiveShadows": true,
+                "reflectable": false
+            },
+            "transform": {
+                "parentRef": "mini_knight_split/entities/RootNode_0.entity",
+                "rotation": [
+                    0,
+                    0,
+                    0
+                ],
+                "scale": [
+                    1,
+                    0.9999999999999999,
+                    0.9999999999999999
+                ],
+                "translation": [
+                    0,
+                    0,
+                    0.008902311325073242
+                ]
+            }
+        },
+        "name": "back",
+        "nodeType": "Mesh",
+        "ref": "mini_knight_split/entities/back.entity"
+    },
     "mini_knight_split/entities/back_0.entity": {
         "components": {
             "meshData": {
@@ -8431,6 +8603,45 @@
         "nodeType": "Mesh",
         "ref": "mini_knight_split/entities/back_0.entity"
     },
+    "mini_knight_split/entities/body.entity": {
+        "components": {
+            "meshData": {
+                "meshRef": "mini_knight_split/meshes/body_0.mesh",
+                "poseRef": "mini_knight_split/skeletons/Skeleton.skeleton"
+            },
+            "meshRenderer": {
+                "castShadows": true,
+                "cullMode": "Dynamic",
+                "hidden": false,
+                "materialRefs": [
+                    "mini_knight_split/materials/unnamed.material"
+                ],
+                "receiveShadows": true,
+                "reflectable": false
+            },
+            "transform": {
+                "parentRef": "mini_knight_split/entities/RootNode_0.entity",
+                "rotation": [
+                    0,
+                    0,
+                    0
+                ],
+                "scale": [
+                    1,
+                    0.9999999999999999,
+                    0.9999999999999999
+                ],
+                "translation": [
+                    0,
+                    0,
+                    0.008549976162612
+                ]
+            }
+        },
+        "name": "body",
+        "nodeType": "Mesh",
+        "ref": "mini_knight_split/entities/body.entity"
+    },
     "mini_knight_split/entities/body_0.entity": {
         "components": {
             "meshData": {
@@ -8442,7 +8653,7 @@
                 "cullMode": "Dynamic",
                 "hidden": false,
                 "materialRefs": [
-                    "mini_knight_split/materials/Material__mini_knight_png.material"
+                    "mini_knight_split/materials/Material__3__mini_knight_png.material"
                 ],
                 "receiveShadows": true,
                 "reflectable": false
@@ -8469,6 +8680,45 @@
         "name": "body",
         "nodeType": "Mesh",
         "ref": "mini_knight_split/entities/body_0.entity"
+    },
+    "mini_knight_split/entities/cap.entity": {
+        "components": {
+            "meshData": {
+                "meshRef": "mini_knight_split/meshes/cap_0.mesh",
+                "poseRef": "mini_knight_split/skeletons/Skeleton.skeleton"
+            },
+            "meshRenderer": {
+                "castShadows": true,
+                "cullMode": "Dynamic",
+                "hidden": false,
+                "materialRefs": [
+                    "mini_knight_split/materials/unnamed.material"
+                ],
+                "receiveShadows": true,
+                "reflectable": false
+            },
+            "transform": {
+                "parentRef": "mini_knight_split/entities/RootNode_0.entity",
+                "rotation": [
+                    0,
+                    0,
+                    0
+                ],
+                "scale": [
+                    1,
+                    0.9999999999999999,
+                    0.9999999999999999
+                ],
+                "translation": [
+                    0,
+                    0,
+                    0
+                ]
+            }
+        },
+        "name": "cap",
+        "nodeType": "Mesh",
+        "ref": "mini_knight_split/entities/cap.entity"
     },
     "mini_knight_split/entities/cap_0.entity": {
         "components": {
@@ -8509,6 +8759,45 @@
         "nodeType": "Mesh",
         "ref": "mini_knight_split/entities/cap_0.entity"
     },
+    "mini_knight_split/entities/legs.entity": {
+        "components": {
+            "meshData": {
+                "meshRef": "mini_knight_split/meshes/legs_0.mesh",
+                "poseRef": "mini_knight_split/skeletons/Skeleton.skeleton"
+            },
+            "meshRenderer": {
+                "castShadows": true,
+                "cullMode": "Dynamic",
+                "hidden": false,
+                "materialRefs": [
+                    "mini_knight_split/materials/unnamed.material"
+                ],
+                "receiveShadows": true,
+                "reflectable": false
+            },
+            "transform": {
+                "parentRef": "mini_knight_split/entities/RootNode_0.entity",
+                "rotation": [
+                    0,
+                    0,
+                    0
+                ],
+                "scale": [
+                    1,
+                    0.9999999999999999,
+                    0.9999999999999999
+                ],
+                "translation": [
+                    0,
+                    0,
+                    0.008549976162612
+                ]
+            }
+        },
+        "name": "legs",
+        "nodeType": "Mesh",
+        "ref": "mini_knight_split/entities/legs.entity"
+    },
     "mini_knight_split/entities/legs_0.entity": {
         "components": {
             "meshData": {
@@ -8520,7 +8809,7 @@
                 "cullMode": "Dynamic",
                 "hidden": false,
                 "materialRefs": [
-                    "mini_knight_split/materials/Material__mini_knight_png.material"
+                    "mini_knight_split/materials/Material__3__mini_knight_png.material"
                 ],
                 "receiveShadows": true,
                 "reflectable": false
@@ -8548,6 +8837,43 @@
         "nodeType": "Mesh",
         "ref": "mini_knight_split/entities/legs_0.entity"
     },
+    "mini_knight_split/entities/sword_Material0.entity": {
+        "components": {
+            "meshData": {
+                "meshRef": "mini_knight_split/meshes/sword_Material0_0.mesh",
+                "poseRef": "mini_knight_split/skeletons/Skeleton.skeleton"
+            },
+            "meshRenderer": {
+                "castShadows": true,
+                "cullMode": "Dynamic",
+                "hidden": false,
+                "materialRefs": [],
+                "receiveShadows": true,
+                "reflectable": false
+            },
+            "transform": {
+                "parentRef": "mini_knight_split/entities/RootNode_0.entity",
+                "rotation": [
+                    36.210432299878164,
+                    -4.5972927548495495,
+                    -0.447812388307957
+                ],
+                "scale": [
+                    1.9999989271163943,
+                    1.999999761581421,
+                    2.000000238418579
+                ],
+                "translation": [
+                    0.06487987190485,
+                    0.519130170345306,
+                    0.234722539782524
+                ]
+            }
+        },
+        "name": "sword_Material0",
+        "nodeType": "Mesh",
+        "ref": "mini_knight_split/entities/sword_Material0.entity"
+    },
     "mini_knight_split/entities/sword_Material0_0.entity": {
         "components": {
             "meshData": {
@@ -8558,9 +8884,7 @@
                 "castShadows": true,
                 "cullMode": "Dynamic",
                 "hidden": false,
-                "materialRefs": [
-                    "mini_knight_split/materials/weapon1.material"
-                ],
+                "materialRefs": [],
                 "receiveShadows": true,
                 "reflectable": false
             },
@@ -8587,6 +8911,43 @@
         "nodeType": "Mesh",
         "ref": "mini_knight_split/entities/sword_Material0_0.entity"
     },
+    "mini_knight_split/entities/sword_Material1.entity": {
+        "components": {
+            "meshData": {
+                "meshRef": "mini_knight_split/meshes/sword_Material1_0.mesh",
+                "poseRef": "mini_knight_split/skeletons/Skeleton.skeleton"
+            },
+            "meshRenderer": {
+                "castShadows": true,
+                "cullMode": "Dynamic",
+                "hidden": false,
+                "materialRefs": [],
+                "receiveShadows": true,
+                "reflectable": false
+            },
+            "transform": {
+                "parentRef": "mini_knight_split/entities/RootNode_0.entity",
+                "rotation": [
+                    36.210432299878164,
+                    -4.5972927548495495,
+                    -0.447812388307957
+                ],
+                "scale": [
+                    1.9999989271163943,
+                    1.999999761581421,
+                    2.000000238418579
+                ],
+                "translation": [
+                    0.06487987190485,
+                    0.519130170345306,
+                    0.234722539782524
+                ]
+            }
+        },
+        "name": "sword_Material1",
+        "nodeType": "Mesh",
+        "ref": "mini_knight_split/entities/sword_Material1.entity"
+    },
     "mini_knight_split/entities/sword_Material1_0.entity": {
         "components": {
             "meshData": {
@@ -8597,9 +8958,7 @@
                 "castShadows": true,
                 "cullMode": "Dynamic",
                 "hidden": false,
-                "materialRefs": [
-                    "mini_knight_split/materials/weapon2.material"
-                ],
+                "materialRefs": [],
                 "receiveShadows": true,
                 "reflectable": false
             },
@@ -8626,6 +8985,43 @@
         "nodeType": "Mesh",
         "ref": "mini_knight_split/entities/sword_Material1_0.entity"
     },
+    "mini_knight_split/entities/sword_Material2.entity": {
+        "components": {
+            "meshData": {
+                "meshRef": "mini_knight_split/meshes/sword_Material2_0.mesh",
+                "poseRef": "mini_knight_split/skeletons/Skeleton.skeleton"
+            },
+            "meshRenderer": {
+                "castShadows": true,
+                "cullMode": "Dynamic",
+                "hidden": false,
+                "materialRefs": [],
+                "receiveShadows": true,
+                "reflectable": false
+            },
+            "transform": {
+                "parentRef": "mini_knight_split/entities/RootNode_0.entity",
+                "rotation": [
+                    36.210432299878164,
+                    -4.5972927548495495,
+                    -0.447812388307957
+                ],
+                "scale": [
+                    1.9999989271163943,
+                    1.999999761581421,
+                    2.000000238418579
+                ],
+                "translation": [
+                    0.06487987190485,
+                    0.519130170345306,
+                    0.234722539782524
+                ]
+            }
+        },
+        "name": "sword_Material2",
+        "nodeType": "Mesh",
+        "ref": "mini_knight_split/entities/sword_Material2.entity"
+    },
     "mini_knight_split/entities/sword_Material2_0.entity": {
         "components": {
             "meshData": {
@@ -8636,9 +9032,7 @@
                 "castShadows": true,
                 "cullMode": "Dynamic",
                 "hidden": false,
-                "materialRefs": [
-                    "mini_knight_split/materials/weapon3.material"
-                ],
+                "materialRefs": [],
                 "receiveShadows": true,
                 "reflectable": false
             },
@@ -8665,6 +9059,43 @@
         "nodeType": "Mesh",
         "ref": "mini_knight_split/entities/sword_Material2_0.entity"
     },
+    "mini_knight_split/entities/sword_Material3.entity": {
+        "components": {
+            "meshData": {
+                "meshRef": "mini_knight_split/meshes/sword_Material3_0.mesh",
+                "poseRef": "mini_knight_split/skeletons/Skeleton.skeleton"
+            },
+            "meshRenderer": {
+                "castShadows": true,
+                "cullMode": "Dynamic",
+                "hidden": false,
+                "materialRefs": [],
+                "receiveShadows": true,
+                "reflectable": false
+            },
+            "transform": {
+                "parentRef": "mini_knight_split/entities/RootNode_0.entity",
+                "rotation": [
+                    0,
+                    0,
+                    0
+                ],
+                "scale": [
+                    1,
+                    1,
+                    1
+                ],
+                "translation": [
+                    0,
+                    0,
+                    0
+                ]
+            }
+        },
+        "name": "sword_Material3",
+        "nodeType": "Mesh",
+        "ref": "mini_knight_split/entities/sword_Material3.entity"
+    },
     "mini_knight_split/entities/sword_Material3_0.entity": {
         "components": {
             "meshData": {
@@ -8675,9 +9106,7 @@
                 "castShadows": true,
                 "cullMode": "Dynamic",
                 "hidden": false,
-                "materialRefs": [
-                    "mini_knight_split/materials/weapon4.material"
-                ],
+                "materialRefs": [],
                 "receiveShadows": true,
                 "reflectable": false
             },
@@ -8720,7 +9149,7 @@
             "enabled": true,
             "write": true
         },
-        "name": "Material__3__mini_knight_png",
+        "name": "knight_material",
         "ref": "mini_knight_split/materials/Material__3__mini_knight_png.material",
         "renderQueue": 1000,
         "shaderRef": "GOO_ENGINE_SHADERS/uber",
@@ -8794,186 +9223,6 @@
             }
         }
     },
-    "mini_knight_split/materials/Material__mini_knight_png.material": {
-        "blendState": {
-            "blendDst": "OneMinusSrcAlphaFactor",
-            "blendEquation": "AddEquation",
-            "blendSrc": "SrcAlphaFactor",
-            "blending": "NoBlending"
-        },
-        "cullState": {
-            "cullFace": "Back",
-            "enabled": true,
-            "frontFace": "CCW"
-        },
-        "depthState": {
-            "enabled": true,
-            "write": true
-        },
-        "name": "Material__mini_knight_png",
-        "ref": "mini_knight_split/materials/Material__mini_knight_png.material",
-        "renderQueue": -1,
-        "shaderRef": "GOO_ENGINE_SHADERS/uber",
-        "texturesMapping": {
-            "DIFFUSE_MAP": {
-                "enabled": true,
-                "textureRef": "mini_knight_split/textures/mini_knight.texture"
-            }
-        },
-        "type": "Lambert",
-        "uniforms": {
-            "discardThreshold": {
-                "enabled": false,
-                "value": 0
-            },
-            "fresnel": {
-                "enabled": true,
-                "value": 0
-            },
-            "materialAmbient": {
-                "enabled": true,
-                "value": [
-                    0.3363636363636363,
-                    0.3363636363636363,
-                    0.3363636363636363,
-                    1
-                ]
-            },
-            "materialDiffuse": {
-                "enabled": true,
-                "value": [
-                    0.6400000000000001,
-                    0.6400000000000001,
-                    0.6400000000000001,
-                    1
-                ]
-            },
-            "materialEmissive": {
-                "enabled": true,
-                "value": [
-                    0.23636363636363633,
-                    0.23636363636363633,
-                    0.23636363636363633,
-                    1
-                ]
-            },
-            "materialSpecular": {
-                "enabled": true,
-                "value": [
-                    0,
-                    0,
-                    0,
-                    1
-                ]
-            },
-            "materialSpecularPower": {
-                "enabled": true,
-                "value": 1
-            },
-            "normalMultiplier": {
-                "enabled": true,
-                "value": 1
-            },
-            "opacity": {
-                "enabled": true,
-                "value": 1
-            },
-            "reflectivity": {
-                "enabled": true,
-                "value": 0
-            }
-        }
-    },
-    "mini_knight_split/materials/Material__mini_knight_png_1.material": {
-        "blendState": {
-            "blendDst": "OneMinusSrcAlphaFactor",
-            "blendEquation": "AddEquation",
-            "blendSrc": "SrcAlphaFactor",
-            "blending": "NoBlending"
-        },
-        "cullState": {
-            "cullFace": "Back",
-            "enabled": true,
-            "frontFace": "CCW"
-        },
-        "depthState": {
-            "enabled": true,
-            "write": true
-        },
-        "name": "Material__mini_knight_png",
-        "ref": "mini_knight_split/materials/Material__mini_knight_png_1.material",
-        "renderQueue": 1000,
-        "shaderRef": "GOO_ENGINE_SHADERS/uber",
-        "texturesMapping": {
-            "DIFFUSE_MAP": {
-                "enabled": true,
-                "textureRef": "mini_knight_split/textures/mini_knight.texture"
-            }
-        },
-        "type": "Lambert",
-        "uniforms": {
-            "discardThreshold": {
-                "enabled": false,
-                "value": 0
-            },
-            "fresnel": {
-                "enabled": true,
-                "value": 0
-            },
-            "materialAmbient": {
-                "enabled": true,
-                "value": [
-                    0.2272727272727273,
-                    0.22520661157024796,
-                    0.22520661157024796,
-                    1
-                ]
-            },
-            "materialDiffuse": {
-                "enabled": true,
-                "value": [
-                    1,
-                    1,
-                    1,
-                    1
-                ]
-            },
-            "materialEmissive": {
-                "enabled": true,
-                "value": [
-                    0.2090909090909091,
-                    0.2090909090909091,
-                    0.2090909090909091,
-                    1
-                ]
-            },
-            "materialSpecular": {
-                "enabled": true,
-                "value": [
-                    0,
-                    0,
-                    0,
-                    1
-                ]
-            },
-            "materialSpecularPower": {
-                "enabled": true,
-                "value": 1
-            },
-            "normalMultiplier": {
-                "enabled": true,
-                "value": 1
-            },
-            "opacity": {
-                "enabled": true,
-                "value": 1
-            },
-            "reflectivity": {
-                "enabled": true,
-                "value": 0
-            }
-        }
-    },
     "mini_knight_split/materials/unnamed.material": {
         "blendState": {
             "blendDst": "OneMinusSrcAlphaFactor",
@@ -8990,10 +9239,16 @@
             "enabled": true,
             "write": true
         },
-        "name": "unnamed",
+        "name": "enemy_material",
         "ref": "mini_knight_split/materials/unnamed.material",
-        "renderQueue": -1,
-        "texturesMapping": {},
+        "renderQueue": 1000,
+        "shaderRef": "GOO_ENGINE_SHADERS/uber",
+        "texturesMapping": {
+            "DIFFUSE_MAP": {
+                "enabled": true,
+                "textureRef": "mini_knight_split/textures/orc.texture"
+            }
+        },
         "type": "Phong",
         "uniforms": {
             "discardThreshold": {
@@ -9007,9 +9262,9 @@
             "materialAmbient": {
                 "enabled": true,
                 "value": [
-                    0,
-                    0,
-                    0,
+                    0.15294117647058825,
+                    0.14901960784313725,
+                    0.14901960784313725,
                     1
                 ]
             },
@@ -9025,9 +9280,9 @@
             "materialEmissive": {
                 "enabled": true,
                 "value": [
-                    0,
-                    0,
-                    0,
+                    0.15294117647058825,
+                    0.14901960784313725,
+                    0.14901960784313725,
                     1
                 ]
             },
@@ -9043,346 +9298,6 @@
             "materialSpecularPower": {
                 "enabled": true,
                 "value": 80
-            },
-            "normalMultiplier": {
-                "enabled": true,
-                "value": 1
-            },
-            "opacity": {
-                "enabled": true,
-                "value": 1
-            },
-            "reflectivity": {
-                "enabled": true,
-                "value": 0
-            }
-        }
-    },
-    "mini_knight_split/materials/weapon1.material": {
-        "blendState": {
-            "blendDst": "OneMinusSrcAlphaFactor",
-            "blendEquation": "AddEquation",
-            "blendSrc": "SrcAlphaFactor",
-            "blending": "NoBlending"
-        },
-        "cullState": {
-            "cullFace": "Back",
-            "enabled": true,
-            "frontFace": "CCW"
-        },
-        "depthState": {
-            "enabled": true,
-            "write": true
-        },
-        "name": "weapon1",
-        "ref": "mini_knight_split/materials/weapon1.material",
-        "renderQueue": -1,
-        "shaderRef": "GOO_ENGINE_SHADERS/uber",
-        "texturesMapping": {},
-        "type": "Lambert",
-        "uniforms": {
-            "discardThreshold": {
-                "enabled": false,
-                "value": 0
-            },
-            "fresnel": {
-                "enabled": true,
-                "value": 0
-            },
-            "materialAmbient": {
-                "enabled": true,
-                "value": [
-                    0,
-                    0,
-                    0,
-                    1
-                ]
-            },
-            "materialDiffuse": {
-                "enabled": true,
-                "value": [
-                    0.05742009,
-                    0.05962671,
-                    0.05794776,
-                    1
-                ]
-            },
-            "materialEmissive": {
-                "enabled": true,
-                "value": [
-                    0,
-                    0,
-                    0,
-                    1
-                ]
-            },
-            "materialSpecular": {
-                "enabled": true,
-                "value": [
-                    0,
-                    0,
-                    0,
-                    1
-                ]
-            },
-            "materialSpecularPower": {
-                "enabled": true,
-                "value": 1
-            },
-            "normalMultiplier": {
-                "enabled": true,
-                "value": 1
-            },
-            "opacity": {
-                "enabled": true,
-                "value": 1
-            },
-            "reflectivity": {
-                "enabled": true,
-                "value": 0
-            }
-        }
-    },
-    "mini_knight_split/materials/weapon2.material": {
-        "blendState": {
-            "blendDst": "OneMinusSrcAlphaFactor",
-            "blendEquation": "AddEquation",
-            "blendSrc": "SrcAlphaFactor",
-            "blending": "NoBlending"
-        },
-        "cullState": {
-            "cullFace": "Back",
-            "enabled": true,
-            "frontFace": "CCW"
-        },
-        "depthState": {
-            "enabled": true,
-            "write": true
-        },
-        "name": "weapon2",
-        "ref": "mini_knight_split/materials/weapon2.material",
-        "renderQueue": -1,
-        "shaderRef": "GOO_ENGINE_SHADERS/uber",
-        "texturesMapping": {},
-        "type": "Lambert",
-        "uniforms": {
-            "discardThreshold": {
-                "enabled": false,
-                "value": 0
-            },
-            "fresnel": {
-                "enabled": true,
-                "value": 0
-            },
-            "materialAmbient": {
-                "enabled": true,
-                "value": [
-                    0,
-                    0,
-                    0,
-                    1
-                ]
-            },
-            "materialDiffuse": {
-                "enabled": true,
-                "value": [
-                    0.11120000000000002,
-                    0.06752000000000001,
-                    0.014240000000000001,
-                    1
-                ]
-            },
-            "materialEmissive": {
-                "enabled": true,
-                "value": [
-                    0,
-                    0,
-                    0,
-                    1
-                ]
-            },
-            "materialSpecular": {
-                "enabled": true,
-                "value": [
-                    0,
-                    0,
-                    0,
-                    1
-                ]
-            },
-            "materialSpecularPower": {
-                "enabled": true,
-                "value": 1
-            },
-            "normalMultiplier": {
-                "enabled": true,
-                "value": 1
-            },
-            "opacity": {
-                "enabled": true,
-                "value": 1
-            },
-            "reflectivity": {
-                "enabled": true,
-                "value": 0
-            }
-        }
-    },
-    "mini_knight_split/materials/weapon3.material": {
-        "blendState": {
-            "blendDst": "OneMinusSrcAlphaFactor",
-            "blendEquation": "AddEquation",
-            "blendSrc": "SrcAlphaFactor",
-            "blending": "NoBlending"
-        },
-        "cullState": {
-            "cullFace": "Back",
-            "enabled": true,
-            "frontFace": "CCW"
-        },
-        "depthState": {
-            "enabled": true,
-            "write": true
-        },
-        "name": "weapon3",
-        "ref": "mini_knight_split/materials/weapon3.material",
-        "renderQueue": -1,
-        "shaderRef": "GOO_ENGINE_SHADERS/uber",
-        "texturesMapping": {},
-        "type": "Lambert",
-        "uniforms": {
-            "discardThreshold": {
-                "enabled": false,
-                "value": 0
-            },
-            "fresnel": {
-                "enabled": true,
-                "value": 0
-            },
-            "materialAmbient": {
-                "enabled": true,
-                "value": [
-                    0,
-                    0,
-                    0,
-                    1
-                ]
-            },
-            "materialDiffuse": {
-                "enabled": true,
-                "value": [
-                    0.4832,
-                    0.4832,
-                    0.4832,
-                    1
-                ]
-            },
-            "materialEmissive": {
-                "enabled": true,
-                "value": [
-                    0.659568,
-                    0.659568,
-                    0.659568,
-                    1
-                ]
-            },
-            "materialSpecular": {
-                "enabled": true,
-                "value": [
-                    0,
-                    0,
-                    0,
-                    1
-                ]
-            },
-            "materialSpecularPower": {
-                "enabled": true,
-                "value": 1
-            },
-            "normalMultiplier": {
-                "enabled": true,
-                "value": 1
-            },
-            "opacity": {
-                "enabled": true,
-                "value": 1
-            },
-            "reflectivity": {
-                "enabled": true,
-                "value": 0
-            }
-        }
-    },
-    "mini_knight_split/materials/weapon4.material": {
-        "blendState": {
-            "blendDst": "OneMinusSrcAlphaFactor",
-            "blendEquation": "AddEquation",
-            "blendSrc": "SrcAlphaFactor",
-            "blending": "NoBlending"
-        },
-        "cullState": {
-            "cullFace": "Back",
-            "enabled": true,
-            "frontFace": "CCW"
-        },
-        "depthState": {
-            "enabled": true,
-            "write": true
-        },
-        "name": "weapon4",
-        "ref": "mini_knight_split/materials/weapon4.material",
-        "renderQueue": -1,
-        "shaderRef": "GOO_ENGINE_SHADERS/uber",
-        "texturesMapping": {},
-        "type": "Lambert",
-        "uniforms": {
-            "discardThreshold": {
-                "enabled": false,
-                "value": 0
-            },
-            "fresnel": {
-                "enabled": true,
-                "value": 0
-            },
-            "materialAmbient": {
-                "enabled": true,
-                "value": [
-                    0,
-                    0,
-                    0,
-                    1
-                ]
-            },
-            "materialDiffuse": {
-                "enabled": true,
-                "value": [
-                    0.13848000000000002,
-                    0.08856000000000001,
-                    0.0036,
-                    1
-                ]
-            },
-            "materialEmissive": {
-                "enabled": true,
-                "value": [
-                    0,
-                    0,
-                    0,
-                    1
-                ]
-            },
-            "materialSpecular": {
-                "enabled": true,
-                "value": [
-                    0,
-                    0,
-                    0,
-                    1
-                ]
-            },
-            "materialSpecularPower": {
-                "enabled": true,
-                "value": 1
             },
             "normalMultiplier": {
                 "enabled": true,
@@ -10067,7 +9982,6 @@
             "mini_knight_split/entities/Mesh_001_0.entity",
             "mini_knight_split/entities/Mesh_0.entity",
             "mini_knight_split/meshes/Mesh_001_0.mesh",
-            "mini_knight_split/materials/Material__mini_knight_png_1.material",
             "mini_knight_split/animations/idle.animstate",
             "mini_knight_split/animations/hit.animstate",
             "mini_knight_split/animations/idle.clip",
@@ -10088,7 +10002,6 @@
             "mini_knight_split/animations/run.clip",
             "mini_knight_split/meshes/cap_0.mesh",
             "mini_knight_split/entities/back_0.entity",
-            "mini_knight_split/materials/Material__mini_knight_png.material",
             "mini_knight_split/binaries/1388515333_data.bin",
             "mini_knight_split/binaries/1388515333_mini_knight_split_idle.bin",
             "mini_knight_split/binaries/1388515333_mini_knight_split_hit.bin",
@@ -10117,21 +10030,17 @@
             "mini_knight_split/binaries/1389443547_mini_knight_split_run.bin",
             "mini_knight_split/entities/legs_0.entity",
             "mini_knight_split/entities/sword_Material0_0.entity",
-            "mini_knight_split/materials/weapon3.material",
             "mini_knight_split/meshes/sword_Material0_0.mesh",
             "mini_knight_split/meshes/sword_Material1_0.mesh",
             "mini_knight_split/meshes/legs_0.mesh",
-            "mini_knight_split/materials/weapon2.material",
             "mini_knight_split/meshes/sword_Material3_0.mesh",
             "mini_knight_split/meshes/body_0.mesh",
             "mini_knight_split/entities/body_0.entity",
             "mini_knight_split/entities/sword_Material1_0.entity",
-            "mini_knight_split/materials/weapon4.material",
             "mini_knight_split/meshes/sword_Material2_0.mesh",
             "mini_knight_split/entities/sword_Material2_0.entity",
             "mini_knight_split/materials/unnamed.material",
             "mini_knight_split/entities/sword_Material3_0.entity",
-            "mini_knight_split/materials/weapon1.material",
             "mini_knight_split/binaries/1389445737_data.bin",
             "mini_knight_split/binaries/1389445737_mini_knight_split_Default_Take.bin",
             "mini_knight_split/binaries/1389445737_mini_knight_split_hit2.bin",
@@ -10141,7 +10050,20 @@
             "mini_knight_split/binaries/1389445737_mini_knight_split_run.bin",
             "mini_knight_split/binaries/1389445737_mini_knight_split_idle.bin",
             "mini_knight_split/binaries/1389445737_mini_knight_split_walk.bin",
-            "mini_knight_split/binaries/1389445737_mini_knight_split_hurt.bin"
+            "mini_knight_split/binaries/1389445737_mini_knight_split_hurt.bin",
+            "mini_knight_split/entities/sword_Material3.entity",
+            "mini_knight_split/entities/sword_Material2.entity",
+            "mini_knight_split/entities/sword_Material1.entity",
+            "mini_knight_split/entities/body.entity",
+            "mini_knight_split/entities/sword_Material0.entity",
+            "mini_knight_split/entities/legs.entity",
+            "mini_knight_split/entities/back.entity",
+            "mini_knight_split/entities/axe.entity",
+            "mini_knight_split/entities/cap.entity",
+            "mini_knight_split/entities/Mesh.entity",
+            "mini_knight_split/entities/Mesh_001.entity",
+            "mini_knight_split/entities/RootNode_0.entity",
+            "mini_knight_split/textures/orc.texture"
         ],
         "name": "mini_knight_split",
         "ref": "mini_knight_split/mini_knight_split.group"
@@ -10823,6 +10745,26 @@
         "wrapU": "Repeat",
         "wrapV": "Repeat"
     },
+    "mini_knight_split/textures/orc.texture": {
+        "anisotropy": 1,
+        "fileName": "orc.png",
+        "flipY": true,
+        "magFilter": "Bilinear",
+        "minFilter": "Trilinear",
+        "name": "orc",
+        "offset": [
+            0,
+            0
+        ],
+        "ref": "mini_knight_split/textures/orc.texture",
+        "repeat": [
+            1,
+            1
+        ],
+        "url": "mini_knight_split/images/orc.png",
+        "wrapU": "Repeat",
+        "wrapV": "Repeat"
+    },
     "posteffects/Bleach.posteffect": {
         "enabled": false,
         "name": "Bleach",
@@ -10916,15 +10858,21 @@
             "mini_knight_split/entities/back_0.entity",
             "mini_knight_split/entities/axe_0.entity",
             "mini_knight_split/entities/cap_0.entity",
-            "mini_knight_split/entities/RootNode.entity"
+            "mini_knight_split/entities/RootNode.entity",
+            "mini_knight_split/entities/body.entity",
+            "mini_knight_split/entities/legs.entity",
+            "mini_knight_split/entities/back.entity",
+            "mini_knight_split/entities/axe.entity",
+            "mini_knight_split/entities/cap.entity",
+            "mini_knight_split/entities/RootNode_0.entity"
         ],
         "fogColor": [
             1,
             1,
             1
         ],
-        "fogFar": 50,
-        "fogNear": 2,
+        "fogFar": 80,
+        "fogNear": 0,
         "globalAmbient": [
             0,
             0,
@@ -10941,7 +10889,7 @@
         ],
         "id": "9GaGQvziSvqzaNMdYVYcsg",
         "licenseType": "CC0",
-        "modified": "2014-01-11T13:11:04.977955",
+        "modified": "2014-01-13T17:50:47.828176",
         "name": "Knight_3_Base_copy",
         "originalLicenseType": "CC0",
         "own": [
@@ -11009,7 +10957,8 @@
             "sounds/door.sound",
             "audio/door.wav",
             "sounds/level.sound",
-            "audio/level.wav"
+            "audio/level.wav",
+            "mini_knight_split/images/orc.png"
         ],
         "name": "root",
         "ref": "root.group"

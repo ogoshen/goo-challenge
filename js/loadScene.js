@@ -107,10 +107,10 @@ require([
 				goo.renderer.domElement.id = 'goo';
 				document.body.appendChild(goo.renderer.domElement);
 
-				// Application code goes here!
 				Game.init(goo, loader);
 
-				// Start the rendering loop!
+				$("#goo").hide().delay(250).fadeIn(750);		
+				
 				goo.startGameLoop();
 
 			}).then(null, function(e) {

@@ -1,5 +1,5 @@
-body {
-	background: black;
+body, html {
+	background: white;
 	font-family: Helvetica;
 }
 
@@ -15,6 +15,7 @@ body {
 }
 
 div#loadingOverlay {
+	color: black;
 	margin: auto;
 	font-family: sans-serif;
 	width: 400px; 
@@ -26,23 +27,26 @@ div#loadingOverlay {
 }
 
 div#loadingMessage h2{
-	color: #fff;
-	text-transform: uppercase;
+	text-shadow: 0 0 2px #fff, 0 1px 0px #0ff, 0 -1px 0px #f0f, 0 0 10px black;	
+	color: black;
+	/*text-transform: uppercase;*/
 	font-weight: 400;
+	font-size: 50px;
+	font-family: 'Lobster', cursive;
 }
 
 div#progressBar {
 	width:400px;
 	margin:auto;
-	background:#555;
-	height:2px;
+	background:#ccc;
+	height:10px;
 }
 
 div#progress {
-	background: white;
+	background: #000;
 	height:100%;
 	width:0;
-	box-shadow: 0px 0px 4px rgba(255,255,255,1);
+	box-shadow: 0 0 2px #fff, 0 1px 4px #0ff, 0 -1px 0px #f0f, 0 0 10px black;	
 }
 
 div#shareButtons {

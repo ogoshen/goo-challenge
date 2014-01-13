@@ -96,9 +96,9 @@ define([
 
 		Utils.addPointLight(goo, new Vector3(0, 2, 0), [1.0, 0.9, 0, 1], {
 			range: 10,
-			intensity: 2
+			intensity: 1.5
 		}, key.transformComponent);
-		Utils.addHalo(goo, 3, Vector3.ZERO, [0.9, 0.8, 0, 0.3], key.transformComponent);
+		Utils.addHalo(goo, 3, Vector3.ZERO, [0.7, 0.6, 0, 0.2], key.transformComponent);
  
 		var up = new Vector3();
 		key.transformComponent.transform.applyForwardVector(Vector3.UNIT_Z, up);

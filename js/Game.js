@@ -151,15 +151,19 @@ define([
 			// ssaoPass.depthTarget.width = 1600;
 			// ssaoPass.depthTarget.height = 412;
 			// ssaoPass.outPass.material.shader.uniforms.size = [1600, 412];
-			ssaoPass.outPass.material.renderQueue = 1;
+			ssaoPass.outPass.material.renderQueue = 4001;
+			// ssaoPass.outPass.material.renderQueue = 1;
 			// ssao.outPass.material.shader.uniforms.size = [goo.renderer.domElement.width, goo.renderer.domElement.height];
 
 			// // Bloom
 			var bloomPass = new BloomPass({
-				sizeX: 512,
-				sizeY: 512,
-				strength: 1
+				sizeX: 256,
+				sizeY: 256,
+				strength: 0.4,
+				sigma: 8
 			});
+			window.BloomPass = BloomPass;
+			window.bloom = bloomPass;
 
 			window.ssao = ssaoPass;
 			window.ssaoShader = ShaderLib.ssao;
@@ -169,20 +173,24 @@ define([
 			var outPass = new FullscreenPass(shader);
 			outPass.renderToScreen = true;
 
+			var vignette = Util.clone(ShaderLib.vignette);
+			vignette.uniforms.darkness = -0.2;
+
 			window.ShaderLib = ShaderLib;
 
 			composer.addPass(renderPass);
 			// composer.addPass(new FullscreenPass(Util.clone(ShaderLib.vignette)));
 			// composer.addPass(new FullscreenPass(Util.clone(ShaderLib.film)));
-			// composer.addPass(bloomPass);
-			composer.addPass(ssaoPass);
+			composer.addPass(bloomPass);
+			composer.addPass(new FullscreenPass(vignette));
+			// composer.addPass(ssaoPass);
 			// composer.addPass(filmPass);
 			composer.addPass(outPass);
 
 			goo.renderSystem.composers.push(composer);
 
 		}
-		// initComposer();
+		initComposer();
 
 
 
@@ -546,7 +554,7 @@ define([
 
 
 		function createFloor() {
-			var normal = new TextureCreator().loadTexture2D('res/images/tile_nm2.jpg');
+			// var normal = new TextureCreator().loadTexture2D('res/images/tile_nm2.jpg');
 
 			// var quadEnt = EntityUtils.createTypicalEntity(goo.world, ShapeCreator.createQuad(1000, 1000, 100, 100));
 			// var floorMat = Material.createMaterial(ShaderLib.simpleLit);
@@ -691,47 +699,38 @@ define([
 		// light.setComponent(new LightDebugComponent());
 		window.light = light;
 
-		var goblin = EntityUtils.clone(goo.world, loader.getCachedObjectForRef("mini_knight_split/entities/RootNode.entity"));
-		goblin.transformComponent.setTranslation(16, 0, 7);
-		// goblin.transformComponent.setTranslation(13, 0, 9);
-		goblin.transformComponent.setRotation(0, Math.PI / 2, 0);
-		// goblin.transformComponent.setRotation(0, -Math.PI / 2, 0);
-		var sphereBounds = new BoundingSphere();
-		sphereBounds.radius = 1.5;
-		goblin.setComponent(new CollisionComponent(goblin, sphereBounds));
-		goblin.setComponent(new Enemy(goblin));
-		goblin.setComponent(new HealthComponent(4));
-		goblin.addToWorld();
-		goblin.tag = "enemy";
-		goblin.hitMask = 1;
-		window.goblin = goblin;
+		var orcEntity = loader.getCachedObjectForRef("mini_knight_split/entities/RootNode.entity")
+		var orcMaterial = loader.getCachedObjectForRef("mini_knight_split/materials/unnamed.material");
 
-		var goblin = EntityUtils.clone(goo.world, loader.getCachedObjectForRef("mini_knight_split/entities/RootNode.entity"));
-		goblin.transformComponent.setTranslation(22, 0, 3);
-		var sphereBounds = new BoundingSphere();
-		sphereBounds.radius = 1.5;
-		goblin.setComponent(new CollisionComponent(goblin, sphereBounds));
-		goblin.setComponent(new Enemy(goblin));
-		goblin.setComponent(new HealthComponent(4));
-		goblin.addToWorld();
-		goblin.tag = "enemy";
-		goblin.hitMask = 1;
-		window.goblin = goblin;
+		function addEnemy(pos, dir) {
+			var orc = EntityUtils.clone(goo.world, orcEntity);
+			orc.transformComponent.setTranslation(pos);
+			// orc.transformComponent.setTranslation(13, 0, 9);
+			// orc.transformComponent.setRotation(0, Math.PI / 2, 0);
+			// orc.transformComponent.setRotation(0, -Math.PI / 2, 0);
+			// 
+			for (var i in orc.transformComponent.children) {
+				var e = orc.transformComponent.children[i].entity;
+				e.meshRendererComponent.materials = [orcMaterial];
+			}
 
-		var goblin = EntityUtils.clone(goo.world, loader.getCachedObjectForRef("mini_knight_split/entities/RootNode.entity"));
-		goblin.transformComponent.setTranslation(12, 0, 1);
-		goblin.transformComponent.setRotation(0, Math.PI / 2, 0);
-		var sphereBounds = new BoundingSphere();
-		sphereBounds.radius = 1.5;
-		goblin.setComponent(new CollisionComponent(goblin, sphereBounds));
-		goblin.setComponent(new Enemy(goblin));
-		goblin.enemy.direction.set(1, 0, 0);
-		goblin.setComponent(new HealthComponent(4));
-		goblin.addToWorld();
-		goblin.tag = "enemy";
-		goblin.hitMask = 1;
-		window.goblin = goblin;
+			var sphereBounds = new BoundingSphere();
+			sphereBounds.radius = 1.2;
+			orc.setComponent(new CollisionComponent(orc, sphereBounds));
+			orc.setComponent(new Enemy(orc));
+			if (dir)
+				orc.enemy.direction.copy(dir);
+			orc.setComponent(new HealthComponent(4));
+			orc.addToWorld();
+			orc.tag = "enemy";
+			orc.hitMask = 1;
 
+			return orc;
+		}
+
+		addEnemy(new Vector3(16, 0, 7), new Vector3(0, 0, 1));
+		addEnemy(new Vector3(22, 0, 3), new Vector3(0, 0, -1));
+		addEnemy(new Vector3(12, 0, 1), new Vector3(1, 0, 0));
 
 
 		var knight = loader.getCachedObjectForRef("mini_knight_split/entities/RootNode.entity");
@@ -971,6 +970,7 @@ define([
 
 		function openDoor(door) {
 			if (door.doorComponent.opening) return;
+			console.log("door");
 
 			_.delay(function() {
 				knight.howlerComponent.playSound('door');
@@ -978,15 +978,13 @@ define([
 
 			door.doorComponent.opening = true;
 			// new TWEEN.Tween(door.transformComponent.transform.translation).to({
-			new TWEEN.Tween({
-				y: 1
-			}).to({
+			new TWEEN.Tween(door.transformComponent.transform.translation).to({
 				y: -1.0001
-			}, 1000)
+			}, 900)
 				.easing(TWEEN.Easing.Bounce.Out)
 				.onUpdate(function() {
 					// door.transformComponent.setTranslation(this);
-					door.transformComponent.transform.translation.y = this.y;
+					// door.transformComponent.transform.translation.y = this.y;
 					door.transformComponent.setUpdated();
 				})
 				.onComplete(function() {
@@ -1000,7 +998,7 @@ define([
 
 		knight.setComponent(new ScriptComponent({
 			// forwardSpeed: 0.15,
-			forwardSpeed: 0.1,
+			forwardSpeed: 0.075,
 			// forwardSpeed: 0.05,
 			runningSpeed: 1,
 			rotationSpeed: 10,

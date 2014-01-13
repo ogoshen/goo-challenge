@@ -15,7 +15,7 @@ define([
 		this.direction = new Vector3(0, 0, 1);
 		this.speed = 0.03;
 		this.ray = new Ray();
-		this.state = 0;
+		this.state = -1;
 		this.target = null;
 		this.entity.collisionComponent.onCollision = this.onCollision;
 
@@ -25,6 +25,11 @@ define([
 			HIT: 2,
 			DEAD: 3
 		}
+
+		var self = this;
+		_.delay(function() {
+			self.state = Enemy.States.IDLE;
+		}, 1000);
 	}
 	Enemy.prototype = Object.create(Component.prototype);
 
@@ -33,7 +38,7 @@ define([
 		this.entity.enemy.target = other;
 		if (this.entity.enemy.state == Enemy.States.DEAD)
 			return;
-		this.entity.enemy.state = 2;
+		this.entity.enemy.state = Enemy.States.HIT;
 	}
 
 	Enemy.prototype.update = function(entity) {
