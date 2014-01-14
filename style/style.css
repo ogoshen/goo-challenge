@@ -1,6 +1,10 @@
 body, html {
 	background: white;
 	font-family: Helvetica;
+	margin: 0;
+	padding: 0;	
+	background: url('/res/images/intro2.jpg') no-repeat;
+	background-size: cover;
 }
 
 #goo {
