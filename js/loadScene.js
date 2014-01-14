@@ -1,11 +1,10 @@
-
 require([
 	'goo/entities/GooRunner',
 	'goo/statemachine/FSMSystem',
 	'goo/addons/howler/systems/HowlerSystem',
 	'goo/loaders/DynamicLoader',
 	'js/Game'
-], function (
+], function(
 	GooRunner,
 	FSMSystem,
 	HowlerSystem,
@@ -17,7 +16,7 @@ require([
 	function init() {
 
 		// If you try to load a scene without a server, you're gonna have a bad time
-		if (window.location.protocol==='file:') {
+		if (window.location.protocol === 'file:') {
 			alert('You need to run this webpage on a server. Check the code for links and details.');
 			return;
 
@@ -50,12 +49,12 @@ require([
 
 		// Make sure user is running Chrome/Firefox and that a WebGL context works
 		var isChrome, isFirefox, isIE, isOpera, isSafari, isCocoonJS;
-		isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-			isFirefox = typeof InstallTrigger !== 'undefined';
-			isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
-			isChrome = !!window.chrome && !isOpera;
-			isIE = false || document.documentMode;
-			isCocoonJS = navigator.appName === "Ludei CocoonJS";
+		isOpera = !! window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+		isFirefox = typeof InstallTrigger !== 'undefined';
+		isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+		isChrome = !! window.chrome && !isOpera;
+		isIE = false || document.documentMode;
+		isCocoonJS = navigator.appName === "Ludei CocoonJS";
 		if (!(isFirefox || isChrome || isSafari || isCocoonJS || isIE === 11)) {
 			alert("Sorry, but your browser is not supported.\nGoo works best in Google Chrome or Mozilla Firefox.\nYou will be redirected to a download page.");
 			window.location.href = 'https://www.google.com/chrome';
@@ -69,8 +68,8 @@ require([
 				event.preventDefault();
 			}, false);
 			// Loading screen callback
-			var progressCallback = function (handled, total) {
-				var loadedPercent = (100*handled/total).toFixed();
+			var progressCallback = function(handled, total) {
+				var loadedPercent = (100 * handled / total).toFixed();
 				var loadingOverlay = document.getElementById("loadingOverlay");
 				var progressBar = document.getElementById("progressBar");
 				var progress = document.getElementById("progress");
@@ -87,7 +86,7 @@ require([
 				antialias: true,
 				manuallyStartGameLoop: true,
 				// tpfSmoothingCount: 1,
-				showStats: true
+				// showStats: true
 			});
 			var fsm = new FSMSystem(goo);
 			goo.world.setSystem(fsm);
@@ -99,9 +98,13 @@ require([
 			var loader = new DynamicLoader({
 				world: goo.world,
 				rootPath: 'res',
-				progressCallback: progressCallback});
+				progressCallback: progressCallback
+			});
 
-			loader.loadFromBundle('project.project', 'root.bundle', {recursive: false, preloadBinaries: true}).then(function(configs) {
+			loader.loadFromBundle('project.project', 'root.bundle', {
+				recursive: false,
+				preloadBinaries: true
+			}).then(function(configs) {
 
 				// This code will be called when the project has finished loading.
 				goo.renderer.domElement.id = 'goo';
@@ -109,8 +112,8 @@ require([
 
 				Game.init(goo, loader);
 
-				$("#goo").hide().delay(250).fadeIn(750);		
-				
+				$("#goo").hide().delay(500).fadeIn(1500);
+
 				goo.startGameLoop();
 
 			}).then(null, function(e) {
@@ -122,5 +125,12 @@ require([
 		}
 	}
 
-	init();
+	$(function() {
+		_.delay(function() {
+			$("#loadingOverlay").fadeIn('fast');
+			init();
+		}, 3000);
+	});
+
+	// init();
 });

@@ -1,8 +1,10 @@
 define([
-	'goo/entities/systems/System'
+	'goo/entities/systems/System',
+	'goo/math/Vector3'	
 ], function(
-	System
-) {
+	System,
+	Vector3
+) {	
 	function CollisionSystem() {
 		// this.type = "CollisionSystem";
 		// this.interests = ["CollisionComponent"];
@@ -21,6 +23,9 @@ define([
 				var e1 = entities[j];
 				if (e0 == e1)
 					continue;
+
+				var d = Vector3.distance(e0.transformComponent.transform.translation, e1.transformComponent.transform.translation);
+				if(d > 10) continue;
 
 				var b0 = e0.collisionComponent.bounds;
 				var b1 = e1.collisionComponent.bounds;

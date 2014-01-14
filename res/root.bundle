@@ -3180,7 +3180,7 @@
     "mini_knight_split/animations/hit.animstate": {
         "clipSource": {
             "clipRef": "mini_knight_split/animations/hit.clip",
-            "loopCount": -1,
+            "loopCount": 1,
             "timeScale": 1,
             "type": "Clip"
         },
@@ -10952,6 +10952,11 @@
             "mini_knight_split/animations/hit2_0.animstate",
             "sounds/walk.sound",
             "audio/walk.wav",
+            "audio/hit.wav",
+            "audio/hit2.wav",
+            "sounds/hit.sound",
+            "sounds/hit2.sound",
+            "sounds/die.sound",
             "sounds/key.sound",
             "audio/key.wav",
             "sounds/door.sound",
@@ -10996,6 +11001,33 @@
         "ref": "sounds/walk.sound",
         "urls": [
             "audio/walk.wav"
+        ],
+        "volume": 0.8
+    },
+    "sounds/hit.sound": {
+        "loop": false,
+        "name": "hit",
+        "ref": "sounds/hit.sound",
+        "urls": [
+            "audio/hit.wav"
+        ],
+        "volume": 1
+    },
+   "sounds/hit2.sound": {
+        "loop": false,
+        "name": "hit2",
+        "ref": "sounds/hit2.sound",
+        "urls": [
+            "audio/hit2.wav"
+        ],
+        "volume": 1
+    },
+   "sounds/die.sound": {
+        "loop": false,
+        "name": "hit2",
+        "ref": "sounds/die.sound",
+        "urls": [
+            "audio/die.wav"
         ],
         "volume": 1
     },

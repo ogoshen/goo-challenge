@@ -111,6 +111,14 @@ define([
 		// window.gui = new dat.GUI();
 		// window.gui = null;
 
+		var music = new window.Howl({
+			urls: ['res/audio/music.mp3'],
+			volume: 1,
+			buffer: true,
+			loop: true,
+			autoplay: true
+		});
+
 		Game.world = goo.world;
 		window.world = goo.world;
 
@@ -257,7 +265,7 @@ define([
 		level1.buildMap(goo, loader);
 		level1.init(function initLevel1() {
 			var key = this.createKey(goo, YellowKey, [-1, 1, 10]);
-			key.tip = '<span class="lobster">Great you found a key!<span><br><span class="ruge">You should look around for a weapon...</span>';
+			key.tip = '<span class="lobster">Great you found a key!<span><br><span class="ruge">There\'s a weapon in the next room, go and kick some butt...</span>';
 
 			this.getBlock(5, 6).setComponent(new DoorComponent(key));
 			this.getBlock(11, 5).setComponent(new DoorComponent(key));
@@ -380,7 +388,7 @@ define([
 				[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1],
 				[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1],
 				[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1],
-				[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 1, 1, 0, 0, 1],
+				[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 2, 1, 1, 0, 0, 1],
 				[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
 				[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
 				[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 1],
@@ -394,6 +402,9 @@ define([
 				}
 			}
 		};
+		level2.init(function initLevel2() {
+			// tree.transformComponent.transform.translation.copy(level.getBlock(5,4).transformComponent.transform.translation);
+		});
 		LEVELS.push(level2);
 
 		window.level = LEVELS[0];
@@ -731,6 +742,8 @@ define([
 		addEnemy(new Vector3(16, 0, 7), new Vector3(0, 0, 1));
 		addEnemy(new Vector3(22, 0, 3), new Vector3(0, 0, -1));
 		addEnemy(new Vector3(12, 0, 1), new Vector3(1, 0, 0));
+		// window.orc = addEnemy(new Vector3(3.5, 0, 1), new Vector3(1, 0, 0));
+		// window.orc = addEnemy(new Vector3(1.5, 0, 1), new Vector3(-1, 0, 0));
 
 
 		var knight = loader.getCachedObjectForRef("mini_knight_split/entities/RootNode.entity");
@@ -741,12 +754,19 @@ define([
 		knight.setComponent(new CollisionComponent(knight, sphereBounds));
 
 		var howlerComponent = new HowlerComponent();
-		// howlerComponent.addSound(new window.Howl({urls: ['res/sounds/walk.wav']}));
-		// howlerComponent.addSound(new window.Howl({urls: ['res/sounds/door.wav']}));
-		// howlerComponent.addSound(new window.Howl({urls: ['res/sounds/key.wav']}));
 		howlerComponent.sounds = {
 			walk: new window.Howl({
-				urls: ['res/audio/walk.wav']
+				urls: ['res/audio/walk.wav'],
+				volume: 0.5
+			}),
+			hit: new window.Howl({
+				urls: ['res/audio/hit.wav']
+			}),
+			hit2: new window.Howl({
+				urls: ['res/audio/hit2.wav']
+			}),
+			die: new window.Howl({
+				urls: ['res/audio/die.wav']
 			}),
 			door: new window.Howl({
 				urls: ['res/audio/door.wav']
@@ -774,6 +794,7 @@ define([
 			}
 
 			if (other.tag == "enemy") {
+
 				var v = Vector3.sub(other.transformComponent.transform.translation, knight.transformComponent.transform.translation);
 				v.y = 0;
 				var d = v.length() - other.collisionComponent.bounds.radius - knight.collisionComponent.bounds.radius;
@@ -782,27 +803,36 @@ define([
 				// knight.transformComponent.transform.translation.add(v.mul(d));
 				knight.transformComponent.setUpdated();
 
+
+
 				var s = knight.animationComponent.layers[0].getCurrentState();
 
-				if (s && s.name == 'hit')
+				if (s && s.name == 'hit') {
 					s.onFinished = function() {
-						console.log("finished");
+						// console.log("finished");
 						other.healthComponent.hp -= 1;
 						if (other.healthComponent.hp > 0)
-							other.animationComponent.transitionTo("hurt");
-						knight.animationComponent.transitionTo("idle");
+							other.animationComponent.transitionTo('hurt');
+						knight.animationComponent.transitionTo('idle');
 						knight.scriptComponent.scripts[0].lastAnim = 'idle';
+
+						if (other.healthComponent.hp > 0)
+							knight.howlerComponent.playSound('hit2');
+						else
+							knight.howlerComponent.playSound('die');
 						delete s.onFinished;
 						return true;
 					}
+				} else {
+					if (other.enemy.hit) {
+						knight.healthComponent.hp -= 1;
+						knight.animationComponent.transitionTo('hurt');
+						knight.scriptComponent.scripts[0].lastAnim = 'hurt';
+						knight.howlerComponent.playSound('hit2');
+					}
 
-				// console.log(s);
-				// if (s && s.name == "hit") {
-				if (false) {
-					other.healthComponent.hp -= 1;
-					if (other.healthComponent.hp > 0)
-						other.animationComponent.transitionTo("hurt");
 				}
+
 			}
 		}
 
@@ -811,15 +841,13 @@ define([
 			console.log(other.tag);
 
 			if (other.tip) {
-				if (false) {
-					$("#tutorial p").html(other.tip);
-					goo.doRender = goo.doProcess = false;
-					_.delay(function() {
-						goo.doRender = goo.doProcess = true;
-					}, 3000);
-					$("#tutorial").hide().fadeIn().delay(3250).fadeOut(750);
-					$("#tutorial p").hide().delay(500).fadeIn().delay(2000).fadeOut(500);
-				}
+				$("#tutorial p").html(other.tip);
+				goo.doRender = goo.doProcess = false;
+				_.delay(function() {
+					goo.doRender = goo.doProcess = true;
+				}, 3000);
+				$("#tutorial").hide().fadeIn().delay(4250).fadeOut(750);
+				$("#tutorial p").hide().delay(500).fadeIn().delay(3000).fadeOut(500);
 			}
 
 			if (other.tag == "weapon") {
@@ -837,7 +865,7 @@ define([
 				console.log("ouch!");
 			}
 
-			if (other.tag == "key") {
+			if (other.tag == "key" || other.tag == "weapon") {
 				console.log("found a key!");
 				console.log(other);
 
@@ -939,12 +967,12 @@ define([
 		// var disk = loader.getCachedObjectForRef("entities/Disk_1.entity");
 		// var pointLight = loader.getCachedObjectForRef("entities/PointLight_0.entity");
 
-		knight.setComponent(new InventoryComponent());
+		knight.setComponent(new HealthComponent(10));
 
+		knight.setComponent(new InventoryComponent());
 		goo.world.setSystem(new DoorSystem(knight.inventoryComponent));
 
 		var t = 0;
-
 
 		function blink(entity) {
 			var c = hit.entity.meshRendererComponent.materials[0].uniforms.materialDiffuse;
@@ -1011,9 +1039,20 @@ define([
 			lastStep: 0,
 			lastAnim: '',
 			run: function PlayerScript(entity) {
+				if (entity.healthComponent.hp <= 0) {
+					entity.animationComponent.transitionTo('die');
+					return;
+				}
+
 				if (!axe.meshRendererComponent.hidden && Input.keys[KeyEvent.DOM_VK_SPACE]) {
 					knight.animationComponent.transitionTo("hit");
 					// knight.animationComponent.layers[0].setCurrentStateByName("hit");
+					if (this.lastAnim != 'hit') {
+						_.delay(function() {
+							entity.howlerComponent.playSound('hit');
+						}, 300);
+						this.lastAnim = 'hit';
+					}
 				}
 
 
@@ -1046,7 +1085,7 @@ define([
 					this.lastAnim = 'idle';
 				}
 
-				if (this.lastAnim != 'hit') {
+				if (this.lastAnim != 'hit' && this.lastAnim != 'hurt') {
 					// var anim = currentState ? currentState.name : 'idle';
 					// anim = dir.length() > 0 ? "walk" : anim;
 					var anim = dir.length() > 0 ? "walk" : "idle";
@@ -1213,7 +1252,8 @@ define([
 		var camEntity = loader.getCachedObjectForRef("entities/Camera.entity");
 		window.cam = camEntity;
 
-
+		// camEntity.setComponent(howlerComponent);
+		// camEntity.howlerComponent.playSound('music');
 
 		function setupCamera() {
 			var camSettings = {

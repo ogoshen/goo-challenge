@@ -16,7 +16,9 @@ define([
 		this.speed = 0.03;
 		this.ray = new Ray();
 		this.state = -1;
+		this.lastState = -1;
 		this.target = null;
+		this.hit = false;
 		this.entity.collisionComponent.onCollision = this.onCollision;
 
 		Enemy.States = {
@@ -95,12 +97,14 @@ define([
 				break;
 
 			case Enemy.States.HIT:
+				this.hit = false;
+
 				var transform = entity.transformComponent.transform;
 				// var d = this.target.transformComponent.transform.translation.clone();
 				var d = new Vector3().copy(this.target.transformComponent.transform.translation);
 				d = Vector3.sub(transform.translation, d);
-				if (d.length() > 3) {
-					entity.enemy.state = 0;
+				if (d.length() > 3 || this.target.healthComponent.hp <= 0) {
+					entity.enemy.state = Enemy.States.IDLE;
 					break;
 				}
 
@@ -113,7 +117,24 @@ define([
 
 
 				entity.transformComponent.setUpdated();
+
+				// if (this.lastState != this.state)
 				entity.animationComponent.transitionTo("hit");
+
+				var currentState = entity.animationComponent.layers[0].getCurrentState();
+				// var currentState = entity.animationComponent.layers[0]._currentState;
+				if (currentState == null) {
+					entity.animationComponent.layers[0].setCurrentStateByName("hit");
+					entity.animationComponent.transitionTo("idle");
+					this.hit = true;
+					console.log("arrgh!");
+				} else {
+					// console.log(currentState);
+					// currentState.onFinished = function() {
+					// console.log("aww!");
+					// };
+				}
+
 				// _.delay(function() {
 				// entity.enemy.state = 0;
 				// }, 500);			
@@ -153,6 +174,8 @@ define([
 			default:
 				break;
 		}
+
+		this.lastState = this.state;
 	}
 
 	return Enemy;
